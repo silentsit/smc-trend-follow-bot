@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: tradingview-oanda-bot
+    env: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn main:app --workers 1 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT --timeout 120
+    autoDeploy: true
+    healthCheckPath: /health
+    envVars:
+      - key: OANDA_ACCOUNT
+        sync: false
+      - key: OANDA_TOKEN
+        sync: false
+      - key: OANDA_API_URL
+        value: https://api-fxtrade.oanda.com/v3
+      - key: OANDA_ENVIRONMENT
+        value: practice
+      - key: RISK_PERCENTAGE
+        value: 2.0
+      - key: MAX_DAILY_LOSS
+        value: 10.0
+      - key: BOS_ENABLE
+        value: true
+      - key: CHOCH_ENABLE
+        value: false
+      - key: LOG_LEVEL
+        value: INFO
+      - key: TIMEZONE
+        value: UTC
+      - key: ALLOWED_ORIGINS
+        value: "*"
